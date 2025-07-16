@@ -7,11 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class StegoApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("mainWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 520, 440);
+        //FXMLLoader fxmlLoader = new FXMLLoader(StegoApplication.class.getResource("mainWindow.fxml"));
+        FXMLLoader fxmlLoader2 = new FXMLLoader(StegoApplication.class.getResource("cipherApp.fxml"));
+        Scene scene = new Scene(fxmlLoader2.load(), 520, 440);
         stage.setTitle("SteganographyApp");
         stage.setScene(scene);
         stage.show();

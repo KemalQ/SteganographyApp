@@ -1,0 +1,30 @@
+.buttons{
+	-fx-background-color: #0B2361;/*buton rengi*/
+  -fx-background-radius: 8px;
+}
+.buttons{
+  -fx-transition-duration: 0.4s;
+}
+.buttons:hover{
+  -fx-background-color: white;
+  -fx-text-fill: #181818;
+  -fx-border-color:black;/*цвет границы */
+  -fx-border-width: 2 2 2 2;/*ширина границы */
+  -fx-border-radius: 8px;/*радиус границы */
+}
+
+.button2{
+	-fx-background-color: #FFFFFF;/*buton rengi */
+    -fx-background-radius: 8px;/* */
+    -fx-border-color:black;/*цвет границы */
+    -fx-border-width: 2 2 2 2;/*ширина границы */
+    -fx-border-radius: 8px;/*радиус границы */
+}
+.button2 {
+  -fx-transition-duration: 0.4s;/*время задержки при наведении мышки*/
+}
+.button2:hover {/*срабатывает при наедении мышки*/
+  -fx-background-color: #181818;
+  -fx-text-fill:  white;
+  /*-fx-color: white;*/
+}
