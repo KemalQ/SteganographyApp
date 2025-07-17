@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1200.0" maxWidth="1800.0" minHeight="700.0" minWidth="1000.0"
-            prefHeight="900.0" prefWidth="1400.0" styleClass="app-container"
-            stylesheets="@../CSS/responsive.css" xmlns="http://javafx.com/javafx/18"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.steganographyapp.StegoController">
+<BorderPane maxHeight="1200.0" maxWidth="1800.0" minHeight="700.0" minWidth="1000.0" prefHeight="900.0" prefWidth="1400.0" styleClass="app-container" stylesheets="@../CSS/responsive.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.steganographyapp.StegoController">
 
     <!-- TOP: MenuBar + ToolBar -->
     <top>
@@ -15,55 +35,38 @@
             <!-- Menu Bar -->
             <MenuBar styleClass="navbar">
                 <Menu text="File">
-                    <MenuItem text="New Project" onAction="#newProject"/>
-                    <MenuItem text="Open Image" onAction="#openImage"/>
-                    <MenuItem text="Save Image" onAction="#saveImage"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Recent Files"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Exit" onAction="#exitApplication"/>
+                    <MenuItem onAction="#newProject" text="New Project" />
+                    <MenuItem onAction="#openImage" text="Open Image" />
+                    <MenuItem onAction="#saveImage" text="Save Image" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Recent Files" />
+                    <SeparatorMenuItem />
+                    <MenuItem onAction="#exitApplication" text="Exit" />
                 </Menu>
                 <Menu text="Edit">
-                    <MenuItem text="Undo" onAction="#undo"/>
-                    <MenuItem text="Redo" onAction="#redo"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Preferences" onAction="#showPreferences"/>
+                    <MenuItem onAction="#undo" text="Undo" />
+                    <MenuItem onAction="#redo" text="Redo" />
+                    <SeparatorMenuItem />
+                    <MenuItem onAction="#showPreferences" text="Preferences" />
                 </Menu>
                 <Menu text="View">
-                    <MenuItem text="Zoom In" onAction="#zoomIn"/>
-                    <MenuItem text="Zoom Out" onAction="#zoomOut"/>
-                    <MenuItem text="Fit to Window" onAction="#fitToWindow"/>
-                    <SeparatorMenuItem/>
-                    <CheckMenuItem text="Show Properties Panel" fx:id="showPropertiesMenuItem"/>
-                    <CheckMenuItem text="Show Status Bar" fx:id="showStatusBarMenuItem"/>
+                    <MenuItem onAction="#zoomIn" text="Zoom In" />
+                    <MenuItem onAction="#zoomOut" text="Zoom Out" />
+                    <MenuItem onAction="#fitToWindow" text="Fit to Window" />
+                    <SeparatorMenuItem />
+                    <CheckMenuItem fx:id="showPropertiesMenuItem" text="Show Properties Panel" />
+                    <CheckMenuItem fx:id="showStatusBarMenuItem" text="Show Status Bar" />
                 </Menu>
                 <Menu text="Tools">
-                    <MenuItem text="Batch Processing" onAction="#openBatchProcessing"/>
-                    <MenuItem text="Image Analysis" onAction="#analyzeImage"/>
-                    <MenuItem text="Format Converter" onAction="#openConverter"/>
+                    <MenuItem onAction="#openBatchProcessing" text="Batch Processing" />
+                    <MenuItem onAction="#analyzeImage" text="Image Analysis" />
+                    <MenuItem onAction="#openConverter" text="Format Converter" />
                 </Menu>
                 <Menu text="Help">
-                    <MenuItem text="Documentation" onAction="#openDocumentation"/>
-                    <MenuItem text="About" onAction="#showAbout"/>
+                    <MenuItem onAction="#openDocumentation" text="Documentation" />
+                    <MenuItem onAction="#showAbout" text="About" />
                 </Menu>
             </MenuBar>
-
-            <!-- Tool Bar -->
-            <ToolBar styleClass="toolbar">
-                <Button fx:id="newProjectBtn" styleClass="btn,btn-primary,btn-sm" text="New"/>
-                <Button fx:id="openImageBtn" styleClass="btn,btn-primary,btn-sm" text="Open"/>
-                <Button fx:id="saveImageBtn" styleClass="btn,btn-success,btn-sm" text="Save"/>
-                <Separator/>
-                <Button fx:id="undoBtn" styleClass="btn,btn-outline-primary,btn-sm" text="Undo"/>
-                <Button fx:id="redoBtn" styleClass="btn,btn-outline-primary,btn-sm" text="Redo"/>
-                <Separator/>
-                <Label text="Algorithm:"/>
-                <ComboBox fx:id="quickAlgorithmSelect" styleClass="form-select" prefWidth="150"/>
-                <Separator/>
-                <Label text="Zoom:"/>
-                <Slider fx:id="zoomSlider" min="0.1" max="5.0" value="1.0" prefWidth="100"/>
-                <Label fx:id="zoomLabel" text="100%"/>
-            </ToolBar>
         </VBox>
     </top>
 
@@ -73,42 +76,43 @@
             <!-- Main work area -->
             <TabPane fx:id="mainTabPane" styleClass="col-8">
                 <!-- ENCODE TAB -->
-                <Tab text="Encode" closable="false">
-                    <GridPane hgap="20" vgap="15" styleClass="p-3">
+                <Tab closable="false" text="Encode">
+                    <GridPane hgap="20" styleClass="p-3" vgap="15">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     <ColumnConstraints />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            <RowConstraints minHeight="200.0" prefHeight="300.0" vgrow="ALWAYS"/>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="200.0" prefHeight="300.0" vgrow="ALWAYS" />
                         </rowConstraints>
 
                         <!-- Original Image Section -->
                         <VBox styleClass="card" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="4">
-                            <Label styleClass="card-header" text="Original Image"/>
+                            <Label styleClass="card-header" text="Original Image" />
                             <VBox styleClass="card-body">
-                                <StackPane fx:id="dropZone" styleClass="image-container" minHeight="200" onDragOver="#handleDragOver" onDragDropped="#handleDragDropped">
-                                    <ImageView fx:id="originalImageView" styleClass="image-view" fitHeight="280" fitWidth="350" pickOnBounds="true" preserveRatio="true"/>
+                                <StackPane fx:id="dropZone" minHeight="200" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" styleClass="image-container">
+                                    <ImageView fx:id="originalImageView" fitHeight="280" fitWidth="350" pickOnBounds="true" preserveRatio="true" styleClass="image-view" />
                                 </StackPane>
                                 <HBox spacing="10" styleClass="mt-2">
-                                    <Button fx:id="openImageButton" styleClass="btn,btn-primary,btn-sm" text="Browse"/>
-                                    <Button fx:id="clearImageButton" styleClass="btn,btn-outline-secondary,btn-sm" text="Clear"/>
+                                    <Button fx:id="openImageButton" onAction="#openImage" styleClass="btn,btn-primary,btn-sm" text="Open" />
+                                    <Button fx:id="clearImageButton" styleClass="btn,btn-outline-secondary,btn-sm" text="Clear" />
                                 </HBox>
                             </VBox>
                         </VBox>
 
                         <!-- Encoded Image Section -->
                         <VBox styleClass="card" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="4">
-                            <Label styleClass="card-header" text="Encoded Result"/>
+                            <Label styleClass="card-header" text="Encoded Result" />
                             <VBox styleClass="card-body">
-                                <StackPane styleClass="image-container" minHeight="200">
-                                    <ImageView fx:id="encodedImageView" styleClass="image-view" fitHeight="280" fitWidth="350" pickOnBounds="true" preserveRatio="true"/>
+                                <StackPane minHeight="200" styleClass="image-container">
+                                    <ImageView fx:id="encodedImageView" fitHeight="280" fitWidth="350" pickOnBounds="true" preserveRatio="true" styleClass="image-view" />
                                 </StackPane>
                                 <HBox spacing="10" styleClass="mt-2">
-                                    <Button fx:id="previewButton" styleClass="btn,btn-info,btn-sm" text="Preview"/>
-                                    <Button fx:id="saveEncodedButton" styleClass="btn,btn-success,btn-sm" text="Save"/>
+                                    <Button fx:id="previewButton" styleClass="btn,btn-info,btn-sm" text="Preview" />
+                                    <Button fx:id="saveEncodedButton" styleClass="btn,btn-success,btn-sm" text="Save" />
                                 </HBox>
                             </VBox>
                         </VBox>
@@ -116,39 +120,39 @@
                 </Tab>
 
                 <!-- DECODE TAB -->
-                <Tab text="Decode" closable="false">
-                    <GridPane hgap="20" vgap="15" styleClass="p-3">
+                <Tab closable="false" text="Decode">
+                    <GridPane hgap="20" styleClass="p-3" vgap="15">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            <RowConstraints minHeight="200.0" prefHeight="300.0" vgrow="ALWAYS"/>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="200.0" prefHeight="300.0" vgrow="ALWAYS" />
                         </rowConstraints>
 
                         <!-- Input Image for Decoding -->
                         <VBox styleClass="card" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="2">
-                            <Label styleClass="card-header" text="Image to Decode"/>
+                            <Label styleClass="card-header" text="Image to Decode" />
                             <VBox styleClass="card-body">
-                                <StackPane fx:id="decodeDropZone" styleClass="image-container" minHeight="200" onDragOver="#handleDecodeDragOver" onDragDropped="#handleDecodeDragDropped">
-                                    <ImageView fx:id="decodeImageView" styleClass="image-view" fitHeight="280" fitWidth="350" pickOnBounds="true" preserveRatio="true"/>
+                                <StackPane fx:id="decodeDropZone" minHeight="200" onDragDropped="#handleDecodeDragDropped" onDragOver="#handleDecodeDragOver" styleClass="image-container">
+                                    <ImageView fx:id="decodeImageView" fitHeight="280" fitWidth="350" pickOnBounds="true" preserveRatio="true" styleClass="image-view" />
                                 </StackPane>
                                 <HBox spacing="10" styleClass="mt-2">
-                                    <Button fx:id="openDecodeImageButton" styleClass="btn,btn-primary,btn-sm" text="Browse"/>
-                                    <Button fx:id="decodeButton" styleClass="btn,btn-warning,btn-sm" text="Extract Text"/>
+                                    <Button fx:id="openDecodeImageButton" styleClass="btn,btn-primary,btn-sm" text="Browse" />
+                                    <Button fx:id="decodeButton" styleClass="btn,btn-warning,btn-sm" text="Extract Text" />
                                 </HBox>
                             </VBox>
                         </VBox>
 
                         <!-- Decoded Text Result -->
                         <VBox styleClass="card" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="2">
-                            <Label styleClass="card-header" text="Extracted Text"/>
+                            <Label styleClass="card-header" text="Extracted Text" />
                             <VBox styleClass="card-body">
-                                <TextArea fx:id="extractedTextArea" styleClass="form-control" prefHeight="280" editable="false" wrapText="true"/>
+                                <TextArea fx:id="extractedTextArea" editable="false" prefHeight="280" styleClass="form-control" wrapText="true" />
                                 <HBox spacing="10" styleClass="mt-2">
-                                    <Button fx:id="copyTextButton" styleClass="btn,btn-info,btn-sm" text="Copy"/>
-                                    <Button fx:id="saveTextButton" styleClass="btn,btn-success,btn-sm" text="Save to File"/>
+                                    <Button fx:id="copyTextButton" styleClass="btn,btn-info,btn-sm" text="Copy" />
+                                    <Button fx:id="saveTextButton" styleClass="btn,btn-success,btn-sm" text="Save to File" />
                                 </HBox>
                             </VBox>
                         </VBox>
@@ -156,64 +160,64 @@
                 </Tab>
 
                 <!-- ANALYSIS TAB -->
-                <Tab text="Analysis" closable="false">
-                    <GridPane hgap="20" vgap="15" styleClass="p-3">
+                <Tab closable="false" text="Analysis">
+                    <GridPane hgap="20" styleClass="p-3" vgap="15">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="200.0" prefHeight="300.0" vgrow="ALWAYS"/>
-                            <RowConstraints minHeight="100.0" prefHeight="150.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="200.0" prefHeight="300.0" vgrow="ALWAYS" />
+                            <RowConstraints minHeight="100.0" prefHeight="150.0" vgrow="SOMETIMES" />
                         </rowConstraints>
 
                         <!-- Image Analysis -->
                         <VBox styleClass="card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label styleClass="card-header" text="Image Analysis"/>
+                            <Label styleClass="card-header" text="Image Analysis" />
                             <VBox styleClass="card-body">
-                                <StackPane styleClass="image-container" minHeight="200">
-                                    <ImageView fx:id="analysisImageView" styleClass="image-view" fitHeight="200" fitWidth="300" pickOnBounds="true" preserveRatio="true"/>
+                                <StackPane minHeight="200" styleClass="image-container">
+                                    <ImageView fx:id="analysisImageView" fitHeight="200" fitWidth="300" pickOnBounds="true" preserveRatio="true" styleClass="image-view" />
                                 </StackPane>
                                 <HBox spacing="10" styleClass="mt-2">
-                                    <Button fx:id="analyzeButton" styleClass="btn,btn-info,btn-sm" text="Analyze"/>
-                                    <Button fx:id="generateReportButton" styleClass="btn,btn-secondary,btn-sm" text="Report"/>
+                                    <Button fx:id="analyzeButton" styleClass="btn,btn-info,btn-sm" text="Analyze" />
+                                    <Button fx:id="generateReportButton" styleClass="btn,btn-secondary,btn-sm" text="Report" />
                                 </HBox>
                             </VBox>
                         </VBox>
 
                         <!-- Analysis Results -->
                         <VBox styleClass="card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label styleClass="card-header" text="Analysis Results"/>
+                            <Label styleClass="card-header" text="Analysis Results" />
                             <VBox styleClass="card-body">
-                                <ScrollPane styleClass="form-control" prefHeight="200">
-                                    <VBox fx:id="analysisResultsContainer" spacing="10"/>
+                                <ScrollPane prefHeight="200" styleClass="form-control">
+                                    <VBox fx:id="analysisResultsContainer" spacing="10" />
                                 </ScrollPane>
                             </VBox>
                         </VBox>
 
                         <!-- Statistics -->
                         <VBox styleClass="card" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
-                            <Label styleClass="card-header" text="Statistics"/>
-                            <HBox styleClass="card-body" spacing="20">
+                            <Label styleClass="card-header" text="Statistics" />
+                            <HBox spacing="20" styleClass="card-body">
                                 <VBox spacing="5">
-                                    <Label styleClass="text-muted" text="File Size"/>
-                                    <Label fx:id="fileSizeLabel" styleClass="font-weight-bold" text="N/A"/>
+                                    <Label styleClass="text-muted" text="File Size" />
+                                    <Label fx:id="fileSizeLabel" styleClass="font-weight-bold" text="N/A" />
                                 </VBox>
                                 <VBox spacing="5">
-                                    <Label styleClass="text-muted" text="Dimensions"/>
-                                    <Label fx:id="dimensionsLabel" styleClass="font-weight-bold" text="N/A"/>
+                                    <Label styleClass="text-muted" text="Dimensions" />
+                                    <Label fx:id="dimensionsLabel" styleClass="font-weight-bold" text="N/A" />
                                 </VBox>
                                 <VBox spacing="5">
-                                    <Label styleClass="text-muted" text="Format"/>
-                                    <Label fx:id="formatLabel" styleClass="font-weight-bold" text="N/A"/>
+                                    <Label styleClass="text-muted" text="Format" />
+                                    <Label fx:id="formatLabel" styleClass="font-weight-bold" text="N/A" />
                                 </VBox>
                                 <VBox spacing="5">
-                                    <Label styleClass="text-muted" text="Capacity"/>
-                                    <Label fx:id="capacityLabel" styleClass="font-weight-bold" text="N/A"/>
+                                    <Label styleClass="text-muted" text="Capacity" />
+                                    <Label fx:id="capacityLabel" styleClass="font-weight-bold" text="N/A" />
                                 </VBox>
                                 <VBox spacing="5">
-                                    <Label styleClass="text-muted" text="Status"/>
-                                    <Label fx:id="statusLabel" styleClass="font-weight-bold" text="Ready"/>
+                                    <Label styleClass="text-muted" text="Status" />
+                                    <Label fx:id="statusLabel" styleClass="font-weight-bold" text="Ready" />
                                 </VBox>
                             </HBox>
                         </VBox>
@@ -222,81 +226,85 @@
             </TabPane>
 
             <!-- Properties Panel -->
-            <VBox fx:id="propertiesPanel" styleClass="col-4,sidebar" minWidth="250" maxWidth="400">
-                <Label styleClass="card-header" text="Properties"/>
+            <VBox fx:id="propertiesPanel" maxWidth="400" minWidth="250" styleClass="col-4,sidebar">
+                <Label styleClass="card-header" text="Properties" />
 
                 <!-- Encoding Settings -->
                 <VBox styleClass="card,mt-2">
-                    <Label styleClass="card-header" text="Encoding Settings"/>
-                    <VBox styleClass="card-body" spacing="10">
+                    <Label styleClass="card-header" text="Encoding Settings" />
+                    <VBox spacing="10" styleClass="card-body">
                         <!-- Text Input -->
                         <VBox>
-                            <Label text="Text to Hide:"/>
-                            <TextArea fx:id="textToHideArea" styleClass="form-control" prefHeight="80" wrapText="true"/>
+                            <Label text="Text to Hide:" />
+                            <TextArea fx:id="textToHideArea" prefHeight="80" styleClass="form-control" wrapText="true" />
                         </VBox>
 
                         <!-- Algorithm Selection -->
                         <VBox>
-                            <Label text="Algorithm:"/>
-                            <ComboBox fx:id="algorithmComboBox" styleClass="form-select" prefWidth="200"/>
+                            <Label text="Algorithm:" />
+                            <ComboBox fx:id="algorithmComboBox" prefWidth="200" styleClass="form-select" />
                         </VBox>
 
                         <!-- Algorithm Parameters -->
                         <VBox fx:id="parametersContainer" spacing="10">
-                            <Label text="Parameters:"/>
+                            <Label text="Parameters:" />
                             <GridPane hgap="5" vgap="5">
                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
-                                <TextField fx:id="param1Field" styleClass="form-control" promptText="Parameter 1" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                                <TextField fx:id="param2Field" styleClass="form-control" promptText="Parameter 2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                                <TextField fx:id="param3Field" styleClass="form-control" promptText="Parameter 3" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                                <TextField fx:id="param4Field" styleClass="form-control" promptText="Parameter 4" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <TextField fx:id="param1Field" promptText="Parameter 1" styleClass="form-control" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <TextField fx:id="param2Field" promptText="Parameter 2" styleClass="form-control" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <TextField fx:id="param3Field" promptText="Parameter 3" styleClass="form-control" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <TextField fx:id="param4Field" promptText="Parameter 4" styleClass="form-control" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <rowConstraints>
+                           <RowConstraints />
+                           <RowConstraints />
+                        </rowConstraints>
                             </GridPane>
                         </VBox>
 
                         <!-- Action Buttons -->
                         <VBox spacing="10">
-                            <Button fx:id="encodeButton" styleClass="btn,btn-primary,btn-block" text="Encode"/>
-                            <Button fx:id="resetButton" styleClass="btn,btn-outline-secondary,btn-block" text="Reset"/>
+                            <Button fx:id="encodeButton" styleClass="btn,btn-primary,btn-block" text="Encode" />
+                            <Button fx:id="resetButton" styleClass="btn,btn-outline-secondary,btn-block" text="Reset" />
                         </VBox>
                     </VBox>
                 </VBox>
 
                 <!-- Advanced Settings -->
                 <VBox styleClass="card,mt-2">
-                    <Label styleClass="card-header" text="Advanced Settings"/>
-                    <VBox styleClass="card-body" spacing="10">
-                        <CheckBox fx:id="compressionCheckBox" text="Enable Compression"/>
-                        <CheckBox fx:id="encryptionCheckBox" text="Enable Encryption"/>
+                    <Label styleClass="card-header" text="Advanced Settings" />
+                    <VBox spacing="10" styleClass="card-body">
+                        <CheckBox fx:id="compressionCheckBox" text="Enable Compression" />
+                        <CheckBox fx:id="encryptionCheckBox" text="Enable Encryption" />
                         <HBox spacing="10">
-                            <Label text="Quality:"/>
-                            <Slider fx:id="qualitySlider" min="1" max="100" value="90" prefWidth="150"/>
-                            <Label fx:id="qualityValueLabel" text="90%"/>
+                            <Label text="Quality:" />
+                            <Slider fx:id="qualitySlider" max="100" min="1" prefWidth="150" value="90" />
+                            <Label fx:id="qualityValueLabel" text="90%" />
                         </HBox>
                     </VBox>
                 </VBox>
 
                 <!-- Image Information -->
                 <VBox styleClass="card,mt-2">
-                    <Label styleClass="card-header" text="Image Information"/>
-                    <VBox styleClass="card-body" spacing="5">
+                    <Label styleClass="card-header" text="Image Information" />
+                    <VBox spacing="5" styleClass="card-body">
                         <HBox>
-                            <Label text="Name: " styleClass="text-muted"/>
-                            <Label fx:id="imageNameLabel" text="N/A"/>
+                            <Label styleClass="text-muted" text="Name: " />
+                            <Label fx:id="imageNameLabel" text="N/A" />
                         </HBox>
                         <HBox>
-                            <Label text="Size: " styleClass="text-muted"/>
-                            <Label fx:id="imageSizeLabel" text="N/A"/>
+                            <Label styleClass="text-muted" text="Size: " />
+                            <Label fx:id="imageSizeLabel" text="N/A" />
                         </HBox>
                         <HBox>
-                            <Label text="Type: " styleClass="text-muted"/>
-                            <Label fx:id="imageTypeLabel" text="N/A"/>
+                            <Label styleClass="text-muted" text="Type: " />
+                            <Label fx:id="imageTypeLabel" text="N/A" />
                         </HBox>
                         <HBox>
-                            <Label text="Dimensions: " styleClass="text-muted"/>
-                            <Label fx:id="imageDimensionsLabel" text="N/A"/>
+                            <Label styleClass="text-muted" text="Dimensions: " />
+                            <Label fx:id="imageDimensionsLabel" text="N/A" />
                         </HBox>
                     </VBox>
                 </VBox>
@@ -307,12 +315,12 @@
     <!-- BOTTOM: Status Bar -->
     <bottom>
         <VBox styleClass="status-bar">
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label fx:id="statusLabelBottom" text="Ready"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="progressLabel" text=""/>
-                <ProgressBar fx:id="progressBar" prefWidth="150" visible="false"/>
-                <Label fx:id="memoryLabel" text="Memory: 0 MB"/>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label fx:id="statusLabelBottom" text="Ready" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="progressLabel" text="" />
+                <ProgressBar fx:id="progressBar" prefWidth="150" visible="false" />
+                <Label fx:id="memoryLabel" text="Memory: 0 MB" />
             </HBox>
         </VBox>
     </bottom>

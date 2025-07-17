@@ -3,9 +3,14 @@ package com.example.steganographyapp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class StegoController {
     @FXML private CheckMenuItem showPropertiesMenuItem;
@@ -81,15 +86,22 @@ public class StegoController {
     @FXML private ProgressBar progressBar;
     @FXML private Label memoryLabel;
 
-
-    @FXML
-    protected void onHelloButtonClick() {
-
-    }
+    private Stage stage;
+    private Image image;
 
     @FXML
     public void openImage(ActionEvent event) {
-        // ...newProject
+        FileChooser fileChooser = new FileChooser();//новое окно для выбора
+        fileChooser.setTitle("Open Image Files");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg,", "*.jpeg"));//png tur dosya secimi
+        File selectedFile = fileChooser.showOpenDialog(stage);// .png formatlı resimleri gösteriyor
+
+        if (selectedFile != null) {
+
+            image = new Image(selectedFile.toURI().toString());
+            originalImageView.setImage(image);
+        }
     }
 
     @FXML
