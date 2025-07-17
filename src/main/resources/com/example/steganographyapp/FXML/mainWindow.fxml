@@ -6,7 +6,7 @@
 
 <BorderPane maxHeight="1200.0" maxWidth="1800.0" minHeight="700.0" minWidth="1000.0"
             prefHeight="900.0" prefWidth="1400.0" styleClass="app-container"
-            stylesheets="@CSS/responsive.css" xmlns="http://javafx.com/javafx/18"
+            stylesheets="@../CSS/responsive.css" xmlns="http://javafx.com/javafx/18"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.steganographyapp.StegoController">
 
     <!-- TOP: MenuBar + ToolBar -->
