@@ -28,3 +28,7 @@
   -fx-text-fill:  white;
   /*-fx-color: white;*/
 }
+
+.buttonRadius {
+  border-radius: 10px; /* Скругляет углы на 10 пикселей */
+}

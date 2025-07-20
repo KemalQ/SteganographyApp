@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -11,12 +11,10 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -253,10 +251,10 @@
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
-                                <TextField fx:id="param1Field" promptText="Parameter 1" styleClass="form-control" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                <TextField fx:id="param2Field" promptText="Parameter 2" styleClass="form-control" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                <TextField fx:id="param3Field" promptText="Parameter 3" styleClass="form-control" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <TextField fx:id="param4Field" promptText="Parameter 4" styleClass="form-control" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="startDate" text="Start Date:" />
+                        <Label fx:id="endDate" text="End Date:" GridPane.columnIndex="1" />
+                        <DatePicker GridPane.rowIndex="1" />
+                        <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <rowConstraints>
                            <RowConstraints />
                            <RowConstraints />
@@ -266,23 +264,9 @@
 
                         <!-- Action Buttons -->
                         <VBox spacing="10">
-                            <Button fx:id="encodeButton" styleClass="btn,btn-primary,btn-block" text="Encode" />
-                            <Button fx:id="resetButton" styleClass="btn,btn-outline-secondary,btn-block" text="Reset" />
+                            <Button fx:id="encodeButton" onAction="#encodeImage" styleClass="btn,btn-primary,btn-block" text="Encode" />
+                            <Button fx:id="resetButton" maxWidth="161.0" prefHeight="35.0" prefWidth="161.0" styleClass="btn,btn-outline-secondary,btn-block" text="Reset" />
                         </VBox>
-                    </VBox>
-                </VBox>
-
-                <!-- Advanced Settings -->
-                <VBox styleClass="card,mt-2">
-                    <Label styleClass="card-header" text="Advanced Settings" />
-                    <VBox spacing="10" styleClass="card-body">
-                        <CheckBox fx:id="compressionCheckBox" text="Enable Compression" />
-                        <CheckBox fx:id="encryptionCheckBox" text="Enable Encryption" />
-                        <HBox spacing="10">
-                            <Label text="Quality:" />
-                            <Slider fx:id="qualitySlider" max="100" min="1" prefWidth="150" value="90" />
-                            <Label fx:id="qualityValueLabel" text="90%" />
-                        </HBox>
                     </VBox>
                 </VBox>
 
