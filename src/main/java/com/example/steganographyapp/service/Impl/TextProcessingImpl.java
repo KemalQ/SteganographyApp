@@ -1,4 +1,6 @@
-package com.example.steganographyapp.service;
+package com.example.steganographyapp.service.Impl;
+
+import com.example.steganographyapp.service.TextProcessing;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;

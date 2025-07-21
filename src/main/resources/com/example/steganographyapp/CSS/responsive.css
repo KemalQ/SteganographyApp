@@ -442,3 +442,16 @@
     -fx-background-color: #2d2d2d;
     -fx-border-color: #444;
 }
+
+// Индикаторы
+.indicator-grey {
+    -fx-background-color: grey;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+.indicator-green {
+    -fx-background-color: #4CAF50;
+}
+.indicator-red {
+    -fx-background-color: #F44336;
+}

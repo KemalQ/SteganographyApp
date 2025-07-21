@@ -19,7 +19,7 @@ import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
 @Data
 @ToString(exclude = "image")
 public class ImageProcessingImpl implements ImageProcessing {
-    private Mat image;
+    private Mat image = new Mat();
 
     public Mat photoToMat(String filePath) {//for .png .jpg / .jpeg .bmp .tiff .webp
         // Чтение изображения в цвете (3 канала: BGR)

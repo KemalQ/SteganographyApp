@@ -215,7 +215,7 @@
                                 </VBox>
                                 <VBox spacing="5">
                                     <Label styleClass="text-muted" text="Status" />
-                                    <Label fx:id="statusLabel" styleClass="font-weight-bold" text="Ready" />
+                                    <Label fx:id="encodeStatusLabel" styleClass="font-weight-bold" text="Ready" />
                                 </VBox>
                             </HBox>
                         </VBox>
