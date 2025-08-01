@@ -7,6 +7,8 @@ import java.util.List;
 public interface ImageProcessing {
     Mat photoToMat(String filePath);
 
+    Mat cropToMultipleOf8(Mat image);
+
     Mat getBlueChannel(Mat image);
 
     double[][] matToDoubleArray(Mat blueChannel);

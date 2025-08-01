@@ -11,13 +11,19 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.opencv_core.Mat;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,6 +38,7 @@ public class StegoController {
     //ENCODE
 
     @FXML private ImageView originalImageView;
+    @FXML private ImageView encodedImageView;
     @FXML private TextArea textToHideArea;
     @FXML private ComboBox<String> algorithmComboBox;
     @FXML private DatePicker startDate;
@@ -39,12 +46,14 @@ public class StegoController {
     @FXML private Button openImageButton;
     @FXML private Button clearImageButton;
     @FXML private Label encodeStatusLabel;
+    @FXML private Button saveButton;
 
-    @FXML private Region imageIndicator;
     @FXML private Region textIndicator;
     @FXML private Region algorithmIndicator;
+    @FXML private Region imageIndicator;
     @FXML private Region startDateIndicator;
     @FXML private Region endDateIndicator;
+
 
 
     //DECODE
@@ -52,7 +61,11 @@ public class StegoController {
     @FXML private ComboBox<String> decodeAlgorithmComboBox;
     @FXML private Button openDecodeImageButton;
     @FXML private Button clearDecodeImageButton;
-
+    @FXML private Button decodeButton;
+    @FXML private TextArea extractedTextArea;
+    @FXML private Button copyTextButton;
+    @FXML private Button saveTextButton;
+    @FXML private Label decodeStatusLabel;
 
 
     @FXML private Button previewButton;
@@ -60,11 +73,6 @@ public class StegoController {
 
     @FXML private Region decodeDropZone;
 
-    @FXML private Button decodeButton;
-
-    @FXML private TextArea extractedTextArea;
-    @FXML private Button copyTextButton;
-    @FXML private Button saveTextButton;
 
     @FXML private ImageView analysisImageView;
     @FXML private Button analyzeButton;
@@ -99,17 +107,19 @@ public class StegoController {
     private String name, path;
     private int width, height;
     private WritableImage outputimage;
+    private Mat processedImage;
 
     private final ImageProcessingImpl imageProcessing = new ImageProcessingImpl();//TODO delete final
     private final MethodEmbeddingImpl methodEmbedding = new MethodEmbeddingImpl();//TODO delete final
     private final SecureRandomStringGeneratorImpl secureRandomStringGenerator = new SecureRandomStringGeneratorImpl();//TODO delete final
 
+    //TODO ENCODE
     @FXML
     public void openImage(ActionEvent event) {//completed
         FileChooser fileChooser = new FileChooser();//новое окно для выбора
         fileChooser.setTitle("Open Image Files");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg,", "*.jpeg"));//png tur dosya secimi
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));//png tur dosya secimi
         File selectedFile = fileChooser.showOpenDialog(stage);// .png formatlı resimleri gösteriyor
 
         if (selectedFile != null) {
@@ -129,42 +139,15 @@ public class StegoController {
 
         }
     }//completed
+    @FXML
+    private void handleImageViewClick(MouseEvent event) {
+        //openImage(event);
+    }
 
     @FXML
     public void setClearImageButton(ActionEvent event) {//completed
         if (originalImageView.getImage() != null) {
             setDefaultImage(true);
-        }
-    }
-
-    public void openDecodeImage(ActionEvent event) {//completed
-        FileChooser fileChooser = new FileChooser();//новое окно для выбора
-        fileChooser.setTitle("Open Image Files");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg,", "*.jpeg"));//png tur dosya secimi
-        File selectedFile = fileChooser.showOpenDialog(stage);// .png formatlı resimleri gösteriyor
-
-        if (selectedFile != null) {
-
-            image = new Image(selectedFile.toURI().toString());
-            decodeImageView.setImage(image);
-            width = (int) image.getWidth();
-            height = (int) image.getHeight();
-            name = selectedFile.getName();
-            imageNameLabel.setText("Name: " + name);
-            imageSizeLabel.setText("Size: " + width + "x" + height + "px");
-
-            long bytes = selectedFile.length();
-            double megabytes = bytes / (1024.0 * 1024.0);
-            imageSizeLabel.setText("Size: " + megabytes + " MB");
-
-
-        }
-    }//completed
-    @FXML
-    public void setClearDecodeImageButton(ActionEvent event) {//completed
-        if (decodeImageView.getImage() != null) {
-            setDefaultImage(false);
         }
     }
 
@@ -175,7 +158,15 @@ public class StegoController {
             return;
         }
 
-        File imageFile = new File(image.getUrl());
+        //File imageFile = new File(image.getUrl());
+        File imageFile;
+        try {
+            imageFile = new File(new URI(image.getUrl()));
+        } catch (URISyntaxException e) {
+            encodeStatusLabel.setText("Invalid image URL format.");
+            return;
+        }
+
         Mat mat = imageProcessing.photoToMat(imageFile.getAbsolutePath());
         Mat blueChannel = imageProcessing.getBlueChannel(mat);
         double[][] array = imageProcessing.matToDoubleArray(blueChannel);
@@ -185,30 +176,12 @@ public class StegoController {
         Mat modifiedBlue = imageProcessing.doubleArrayToMat2(imageArray);
         Mat finalImage = imageProcessing.replaceBlueChannel(mat, modifiedBlue);
 
-        String path = System.getProperty("user.home") + "/Desktop/OutputFiles/" + secureRandomStringGenerator.generateRandomString(16) + ".png";
-        imwrite(path, finalImage);
-        encodeStatusLabel.setText("Image saved: " + path);
+        this.processedImage = finalImage;
+        encodeStatusLabel.setText("Image encoded successfully. Click Save to save the file.");
 
-//        File imageFile = new File(image.getUrl());
-//        validateInputs();
-//
-//        Mat mat = imageProcessing.photoToMat(imageFile.getAbsolutePath());// returns mat object
-//        Mat blueChannel = imageProcessing.getBlueChannel(mat);//returns blue channel
-//        double[][] array = imageProcessing.matToDoubleArray(blueChannel);//returns double[][]
-//        List<double[][]> arrayOfBlocks = imageProcessing.splitIntoArrayOfBlocks(array);//transforms double[][] to List<double[][]>
-//
-//        arrayOfBlocks = methodEmbedding.embeddingMethodOne(arrayOfBlocks, "Checking ukrainian symbols, ну коли вже");
-//
-//        double[][] imageArray = imageProcessing.mergeFromArrayOfBlocks(arrayOfBlocks, array.length, array[0].length);//TODO 14.05.2025 debug
-//
-//        Mat modifiedBlue = imageProcessing.doubleArrayToMat2(imageArray);//TODO 14.05.2025 debug
-//
-//        Mat finalImage = imageProcessing.replaceBlueChannel(mat, modifiedBlue);//TODO 14.05.2025 debug
-//
-//        //TODO this part is for saving, edit it to save in stage
-//        String path = System.getProperty("user.home") + "/Desktop/OutputFiles/"+ secureRandomStringGenerator.generateRandomString(16) + ".png";
-//        imwrite(path, finalImage);
-//        System.out.println("Saved: " + path);
+        if (processedImage != null){
+            encodedImageView.setImage(matToImage(processedImage));
+        }
     }
 
     private boolean validateInputs() {
@@ -271,17 +244,112 @@ public class StegoController {
         algorithmComboBox.setPromptText("Select encryption method");
         startDate.setValue(null);
         endDate.setValue(null);
+        encodeStatusLabel.setText("Ready to encode");
     }
 
+    @FXML
+    public void saveImage(ActionEvent even){
+        if (processedImage == null){
+            encodeStatusLabel.setText("No encoded image to savePlease encode an image first.");
+            return;
+        }
+        // Показываем диалог выбора места сохранения
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Encoded Image");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PNG Files", "*.png")
+        );
+        fileChooser.setInitialFileName(secureRandomStringGenerator.generateRandomString(16) + ".png");
+
+        File saveFile = fileChooser.showSaveDialog(stage);
+
+        if (saveFile != null) {
+            try {
+                String savePath = saveFile.getAbsolutePath();
+                if (!savePath.endsWith(".png")) {
+                    savePath += ".png";
+                }
+
+                boolean success = imwrite(savePath, processedImage);
+
+                if (success) {
+                    encodeStatusLabel.setText("Image saved successfully: " + savePath);
+                } else {
+                    encodeStatusLabel.setText("Failed to save image.");
+                }
+            } catch (Exception e) {
+                encodeStatusLabel.setText("Error saving image: " + e.getMessage());
+            }
+        }
+    }
+
+    //TODO DECODE
+    public void openDecodeImage(ActionEvent event) {//completed
+        FileChooser fileChooser = new FileChooser();//новое окно для выбора
+        fileChooser.setTitle("Open Image Files");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg,", "*.jpeg"));//png tur dosya secimi
+        File selectedFile = fileChooser.showOpenDialog(stage);// .png formatlı resimleri gösteriyor
+
+        if (selectedFile != null) {
+
+            image = new Image(selectedFile.toURI().toString());
+            decodeImageView.setImage(image);
+            width = (int) image.getWidth();
+            height = (int) image.getHeight();
+            name = selectedFile.getName();
+            imageNameLabel.setText("Name: " + name);
+            imageSizeLabel.setText("Size: " + width + "x" + height + "px");
+
+            long bytes = selectedFile.length();
+            double megabytes = bytes / (1024.0 * 1024.0);
+            imageSizeLabel.setText("Size: " + megabytes + " MB");
+
+
+        }
+    }//completed
+
+    @FXML
+    public void setClearDecodeImageButton(ActionEvent event) {
+        if (decodeImageView.getImage() != null) {
+            setDefaultImage(false);
+        }
+    }//completed
+
+    @FXML
+    public void decodeText(ActionEvent event) {
+        if (image == null || image.getUrl() == null) {
+            decodeStatusLabel.setText("Please select an image first.");
+            return;
+        }
+
+        File imageFileDecode;
+            try {
+                imageFileDecode = new File(new URI(image.getUrl()));
+            } catch (URISyntaxException e) {
+                decodeStatusLabel.setText("Invalid image URL format.");
+                return;
+            }
+
+            Mat matDecode = imageProcessing.photoToMat(imageFileDecode.getAbsolutePath());// returns mat object
+            Mat blueChannelDecode = imageProcessing.getBlueChannel(matDecode);//returns blue channel
+            double[][] arrayDecode = imageProcessing.matToDoubleArray(blueChannelDecode);//returns double[][]
+            List<double[][]> arrayOfBlocksDecode = imageProcessing.splitIntoArrayOfBlocks(arrayDecode);
+            String decodedText = methodEmbedding.extractingMethodOne(arrayOfBlocksDecode);
+
+        if (decodedText == null || decodedText.isBlank()) {
+            decodeStatusLabel.setText("No hidden message found or failed to extract.");
+            extractedTextArea.clear();
+        } else {
+            extractedTextArea.setText(decodedText);
+            decodeStatusLabel.setText("Message successfully extracted.");
+        }
+
+    }
 
     @FXML
     public void decodeImage(ActionEvent event) {
 
-    }
-
-    @FXML
-    public void saveImage(ActionEvent event) {
-        // ...newProject
     }
 
     private void setComboBox(){//completed
@@ -322,86 +390,14 @@ public class StegoController {
     public void takingEndDate(){//completed
         LocalDate end = endDate.getValue();
     }
+
+    public static Image matToImage(Mat mat){
+        BytePointer bytePointer = new BytePointer();
+        opencv_imgcodecs.imencode(".png", mat, bytePointer);
+
+        byte[] bytes = new byte[(int)bytePointer.limit()];
+        bytePointer.get(bytes);
+
+        return new Image(new ByteArrayInputStream(bytes));
+    }
 }
-
-/*
-    @FXML
-    public void exitApplication(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void undo(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void redo(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void showPreferences(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void zoomIn(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void zoomOut(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void fitToWindow(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void openBatchProcessing(ActionEvent event) {
-        // ...newProject
-    }
-
-    @FXML
-    public void analyzeImage(ActionEvent event) {
-        // ...openConverter
-    }
-
-    @FXML
-    public void openConverter(ActionEvent event) {
-        // ...
-    }
-
-    @FXML
-    public void openDocumentation(ActionEvent event) {
-        // ...openConverter
-    }
-
-    @FXML
-    public void showAbout(ActionEvent event) {
-        // ...openConverter
-    }
-
-    @FXML
-    public void handleDragOver(ActionEvent event) {
-        // ...openConverter
-    }
-
-    @FXML
-    public void handleDragDropped(ActionEvent event) {
-        // ...openConverter
-    }
-
-    @FXML
-    public void handleDecodeDragOver(ActionEvent event) {
-        // ...openConverter
-    }
-
-    @FXML
-    public void handleDecodeDragDropped(ActionEvent event) {
-        // ...openConverter
-    }
-* */

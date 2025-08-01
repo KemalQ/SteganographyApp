@@ -7,29 +7,58 @@ import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacpp.indexer.UByteRawIndexer;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.MatVector;
+import org.bytedeco.opencv.opencv_core.Rect;
 import org.jtransforms.dct.DoubleDCT_2D;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.IMREAD_COLOR;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 
+@Slf4j
 @Data
 @ToString(exclude = "image")
 public class ImageProcessingImpl implements ImageProcessing {
     private Mat image = new Mat();
 
-    public Mat photoToMat(String filePath) {//for .png .jpg / .jpeg .bmp .tiff .webp
-        // Чтение изображения в цвете (3 канала: BGR)
-        Mat matImage = imread(filePath, IMREAD_COLOR);
-        if (matImage.empty()){
-            throw new RuntimeException("Failed to load image: " + filePath);
+    @Override
+    public Mat photoToMat(String filePath) {
+        try {
+            byte[] imageBytes = Files.readAllBytes(Paths.get(filePath));
+
+            Mat imageMat = new Mat(imageBytes);
+            Mat image = imdecode(imageMat, IMREAD_COLOR);
+
+            if (image.empty()) {
+                throw new RuntimeException("Не удалось декодировать изображение: " + filePath);
+            }
+
+            imageMat.release(); // Освобождаем временную матрицу
+
+            if (image.rows()%8 != 0 || image.cols()%8 != 0){// обрезаем до кратного 8 размера
+                image = cropToMultipleOf8(image);
+            }
+            return image;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Не удалось прочитать файл: " + filePath, e);
         }
-        //log.atError();//TODO add logging
-        return matImage;
     }
+
+    public Mat cropToMultipleOf8(Mat image) {//TODO добавить к основному модулю
+        int height = image.rows();
+        int width = image.cols();
+
+        int newHeight = (height / 8) * 8;
+        int newWidth = (width / 8) * 8;
+
+        return new Mat(image, new Rect(0, 0, newWidth, newHeight));
+    }
+
 
     public Mat getBlueChannel(Mat image) {
         // Создаём список для каналов
